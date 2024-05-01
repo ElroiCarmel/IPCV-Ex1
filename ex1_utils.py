@@ -65,7 +65,7 @@ def transformRGB2YIQ(imgRGB: np.ndarray) -> np.ndarray:
     """
     rgb_to_yiq = np.array([0.299, 0.587, 0.114, 0.596, -0.275, -0.321, 0.212, -0.523, 0.311]).reshape(3,-1)
     img_yiq = imgRGB.copy().reshape(-1, 3)
-    img_yiq = img_yiq.dot(rgb_to_yiq).reshape(imgRGB.shape)
+    img_yiq = img_yiq.dot(rgb_to_yiq.T).reshape(imgRGB.shape)
     return img_yiq
 
 
@@ -85,11 +85,11 @@ def hsitogramEqualize(imgOrig: np.ndarray) -> (np.ndarray, np.ndarray, np.ndarra
     :ret (imgEq,histOrg,histEQ)
     """
     if len(imgOrig.shape) == 2:  # If it's GREYSCALE
-        img_cpy = np.round((imgOrig.copy() * 255)).flatten().astype(np.uint8)
+        img_cpy = np.round(imgOrig.copy() * 255).flatten().astype(np.uint8)
         org_shape = imgOrig.shape
         hist_org = np.histogram(img_cpy, bins=256, range=(0, 256))[0].astype(int)
         lut = np.cumsum(hist_org) / len(img_cpy)
-        lut = np.round(lut*255).astype(int)
+        lut = np.ceil(lut*255).astype(int)
         img_eq = lut[img_cpy]
         hist_eq = np.histogram(img_eq.copy(), bins=256, range=(0, 256))[0]
         img_eq = (img_eq/255).reshape(org_shape)
