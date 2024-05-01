@@ -11,16 +11,17 @@
 from typing import List
 
 import numpy as np
+import cv2
 LOAD_GRAY_SCALE = 1
 LOAD_RGB = 2
 
 
-def myID() -> np.int:
+def myID() -> int:
     """
     Return my ID (not the friend's ID I copied from)
     :return: int
     """
-    return 123456789
+    return 208762971
 
 
 def imReadAndConvert(filename: str, representation: int) -> np.ndarray:
@@ -30,7 +31,13 @@ def imReadAndConvert(filename: str, representation: int) -> np.ndarray:
     :param representation: GRAY_SCALE or RGB
     :return: The image object
     """
-    pass
+    img = cv2.imread(filename)
+    if representation == LOAD_GRAY_SCALE:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    elif representation == LOAD_RGB:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = img / 255
+    return img.astype(np.float_)
 
 
 def imDisplay(filename: str, representation: int):
