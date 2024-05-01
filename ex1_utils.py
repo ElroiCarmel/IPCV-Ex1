@@ -63,7 +63,10 @@ def transformRGB2YIQ(imgRGB: np.ndarray) -> np.ndarray:
     :param imgRGB: An Image in RGB
     :return: A YIQ in image color space
     """
-    pass
+    rgb_to_yiq = np.array([0.299, 0.587, 0.114, 0.596, -0.275, -0.321, 0.212, -0.523, 0.311]).reshape(3,-1)
+    img_yiq = imgRGB.copy().reshape(-1, 3)
+    img_yiq = img_yiq.dot(rgb_to_yiq).reshape(imgRGB.shape)
+    return img_yiq
 
 
 def transformYIQ2RGB(imgYIQ: np.ndarray) -> np.ndarray:
