@@ -12,6 +12,8 @@ from typing import List
 
 import numpy as np
 import cv2
+from matplotlib import pyplot as plt
+
 LOAD_GRAY_SCALE = 1
 LOAD_RGB = 2
 
@@ -37,7 +39,7 @@ def imReadAndConvert(filename: str, representation: int) -> np.ndarray:
     elif representation == LOAD_RGB:
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = img / 255
-    return img.astype(np.float_)
+    return img
 
 
 def imDisplay(filename: str, representation: int):
@@ -47,7 +49,12 @@ def imDisplay(filename: str, representation: int):
     :param representation: GRAY_SCALE or RGB
     :return: None
     """
-    pass
+    img = imReadAndConvert(filename, representation)
+    if representation == LOAD_GRAY_SCALE:
+        plt.imshow(img, cmap='grey')
+    else:
+        plt.imshow(img)
+    plt.show()
 
 
 def transformRGB2YIQ(imgRGB: np.ndarray) -> np.ndarray:
@@ -70,11 +77,20 @@ def transformYIQ2RGB(imgYIQ: np.ndarray) -> np.ndarray:
 
 def hsitogramEqualize(imgOrig: np.ndarray) -> (np.ndarray, np.ndarray, np.ndarray):
     """
-        Equalizes the histogram of an image
-        :param imgOrig: Original Histogram
-        :ret
+    Equalizes the histogram of an image
+    :param imgOrig: Original Histogram
+    :ret (imgEq,histOrg,histEQ)
     """
-    pass
+    if len(imgOrig.shape) == 2:  # If it's GREYSCALE
+        img_cpy = np.round((imgOrig.copy() * 255)).flatten().astype(np.uint8)
+        org_shape = imgOrig.shape
+        hist_org = np.histogram(img_cpy, bins=256, range=(0, 256))[0].astype(int)
+        lut = np.cumsum(hist_org) / len(img_cpy)
+        lut = np.round(lut*255).astype(int)
+        img_eq = lut[img_cpy]
+        hist_eq = np.histogram(img_eq.copy(), bins=256, range=(0, 256))[0]
+        img_eq = (img_eq/255).reshape(org_shape)
+        return img_eq, hist_org, hist_eq
 
 
 def quantizeImage(imOrig: np.ndarray, nQuant: int, nIter: int) -> (List[np.ndarray], List[float]):
