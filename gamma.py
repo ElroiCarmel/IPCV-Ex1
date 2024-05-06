@@ -23,7 +23,6 @@ def gammaDisplay(img_path: str, rep: int):
 
     def gammaChange(val: int):
         gamma = val / 100
-        print(gamma, val)
         img_cpy = np.round(np.power(img_norm, gamma)*255).astype(np.uint8)
         cv2.imshow('Gamma Correction', img_cpy)
 
