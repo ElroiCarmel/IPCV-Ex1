@@ -8,7 +8,7 @@
          ########: ##:::. ##::'######:
         ........::..:::::..:::......::
 """
-from ex1_utils import LOAD_GRAY_SCALE
+from ex1_utils import LOAD_GRAY_SCALE, LOAD_RGB
 import numpy as np
 import cv2
 
@@ -40,7 +40,7 @@ def gammaDisplay(img_path: str, rep: int):
 
 
 def main():
-    gammaDisplay('bac_con.png', LOAD_GRAY_SCALE)
+    gammaDisplay('water_bear.png', LOAD_RGB)
 
 
 if __name__ == '__main__':
