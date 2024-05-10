@@ -142,7 +142,7 @@ def quantizeImage(imOrig: np.ndarray, nQuant: int, nIter: int) -> (List[np.ndarr
     for n in range(nIter):
         # Calculate borders
         if n == 0:
-            borders = np.linspace(0, 255, num=nQuant+1, dtype=int)
+            borders = np.linspace(img.min(), img.max(), num=nQuant+1, dtype=int)
             borders[-1] = int(256)
         else:
             for i in range(nQuant-1):
